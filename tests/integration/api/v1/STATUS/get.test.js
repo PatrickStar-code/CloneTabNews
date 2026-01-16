@@ -8,8 +8,8 @@ test("GET to /api/v1/status should return 200", async () => {
   const parsedUpdateAt = new Date(responseBody.update_At).toISOString();
   expect(responseBody.update_At).toEqual(parsedUpdateAt);
 
-  expect(responseBody.dependencies.database.version).toEqual("16.11");
-  expect(responseBody.dependencies.database.max_Connections).toEqual(100);
+  expect(responseBody.dependencies.database.version).toEqual("16.11 (f45eb12)");
+  expect(responseBody.dependencies.database.max_Connections).toEqual(901);
   expect(
     responseBody.dependencies.database.opened_connections,
   ).toBeGreaterThanOrEqual(1);
