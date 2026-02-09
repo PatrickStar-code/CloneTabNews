@@ -22,7 +22,6 @@ export default async function migrations(req, res) {
 
     return res.status(200).json(pendingMigrations);
   }
-
   if (req.method === "POST") {
     try {
       const migratedMigrations = await migrationRunner({
@@ -37,8 +36,9 @@ export default async function migrations(req, res) {
       if (error.message?.includes("Another migration is already running")) {
         return res.status(200).json([]);
       }
-
       throw error;
+    } finally {
+      await dbClient.end(); // aqui está a correção
     }
   }
 
