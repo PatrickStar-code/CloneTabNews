@@ -1,0 +1,126 @@
+[33mcommit 53bc67d30bb80146162d4e568445b8b7970e8889[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: patrick <patrick.almeida06@gmail.com>
+Date:   Mon Feb 9 14:46:25 2026 -0300
+
+    fix: All erros in tests
+
+[33mcommit 4c19830c14d13b2d2336f3799a91cbabe1f955c4[m
+Author: Patrick <patrick.almeida06@gmail.com>
+Date:   Thu Jan 15 21:57:36 2026 -0300
+
+    add api/v1/migrations endpoint
+
+[33mcommit acd7bcd30298557571d6c02373ac5b2f70c80491[m
+Author: Patrick <patrick.almeida06@gmail.com>
+Date:   Sun Jan 11 15:55:03 2026 -0300
+
+    add migrations scripts
+
+[33mcommit 54ef054df46b9e87e28c271d89ebed1fa9ea059b[m
+Author: Patrick <patrick.almeida06@gmail.com>
+Date:   Mon Jan 5 22:09:57 2026 -0300
+
+    handles database necessary conection
+
+[33mcommit e25bb1beafee18881c32af8244c69be52cef27fe[m
+Author: Patrick <patrick.almeida06@gmail.com>
+Date:   Mon Jan 5 21:20:53 2026 -0300
+
+    improve the log of erros in database.js"
+
+[33mcommit b51a5207982f63d2f824ed41fd19554b452f1933[m
+Author: Patrick <patrick.almeida06@gmail.com>
+Date:   Sun Jan 4 22:00:34 2026 -0300
+
+    finish pi/v1/status end point
+
+[33mcommit c96f85decf51fb66399d63f7e6903b0b892ebff5[m
+Author: Patrick <patrick.almeida06@gmail.com>
+Date:   Sun Jan 4 22:00:10 2026 -0300
+
+    make databesae more robust to error handling
+
+[33mcommit d896218f10de37814a3b507c0f106effbf94bdf5[m
+Author: Patrick <patrick.almeida06@gmail.com>
+Date:   Thu Jan 1 20:44:06 2026 -0300
+
+    add services scripts
+
+[33mcommit b80d78086e84dd8040af4c38df1cd0bafcde9304[m
+Author: Patrick <patrick.almeida06@gmail.com>
+Date:   Thu Jan 1 20:34:45 2026 -0300
+
+    feat add .\jsconfig.json
+
+[33mcommit 2380d397d6e633bfadf210c996d3a97c2717cd31[m
+Author: Patrick <patrick.almeida06@gmail.com>
+Date:   Thu Jan 1 20:04:46 2026 -0300
+
+    move .env file to env.development
+
+[33mcommit 4df560dcf4f11feee1519056edb058ed46e5d842[m
+Author: Patrick <patrick.almeida06@gmail.com>
+Date:   Wed Dec 31 16:35:46 2025 -0300
+
+    feat:add env variable and 'database.js'
+
+[33mcommit d5bb2ec4e048ea44a814fe59c03b72c5132804ba[m
+Author: root <root@DESKTOP-A1DC1UK.localdomain>
+Date:   Tue Dec 30 15:04:54 2025 -0300
+
+    chore:Added the docker compose yaml
+
+[33mcommit c054df157b0defbb8934c1281c83033fa49e46af[m
+Author: Patrick <patrick.almeida06@gmail.com>
+Date:   Mon Dec 29 15:02:15 2025 -0300
+
+    feat:Created the endPoint(/status)
+
+[33mcommit baabc3aeaa8f57712ddbcba54c0bd6d677c79c85[m
+Author: Patrick <patrick.almeida06@gmail.com>
+Date:   Fri Dec 26 15:53:30 2025 -0300
+
+    chore:Added Jest
+
+[33mcommit 81af6d0c6f3a1e6de0f5e98989788cce5ac69de4[m
+Author: Patrick <patrick.almeida06@gmail.com>
+Date:   Fri Dec 19 16:21:21 2025 -0300
+
+    feat:added the 'prettierignore'
+
+[33mcommit abeed0e90c345f7cf250990b6c4e94106d476a64[m
+Author: Patrick <patrick.almeida06@gmail.com>
+Date:   Fri Dec 19 16:14:40 2025 -0300
+
+    feat:added prettier
+
+[33mcommit 9026e4def3e8ca0838e47caf856bec57621c8500[m
+Merge: c9dfdd9 71db62c
+Author: Patrick <patrick.almeida06@gmail.com>
+Date:   Fri Dec 19 16:01:42 2025 -0300
+
+    feat:Added the editorconfig
+
+[33mcommit c9dfdd9856b7c0ccd68d394bfb78904c514972f8[m
+Author: Patrick <patrick.almeida06@gmail.com>
+Date:   Tue Dec 16 20:15:43 2025 -0300
+
+    feat:Added the .nvmrc
+
+[33mcommit 71db62c9affede892ca1fa7ead572d89592a73c1[m
+Author: Patrick Almeida <patrick.almeida06@gmail.com>
+Date:   Fri Dec 12 09:39:30 2025 -0300
+
+    feat:add the gitignore
+
+[33mcommit 332dba27b420c953f599c352346f3b5736cfbf5f[m
+Author: Patrick Almeida <patrick.almeida06@gmail.com>
+Date:   Thu Dec 11 21:11:13 2025 -0300
+
+    chore: initial commit
+
+[33mcommit 3dd93a5b69ae5514595ab1f4d0be6ac9e9faa3be[m
+Author: Patrick Almeida <patrick.almeida06@gmail.com>
+Date:   Thu Dec 11 21:10:55 2025 -0300
+
+    first commit
