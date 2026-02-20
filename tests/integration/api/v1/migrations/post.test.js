@@ -1,9 +1,15 @@
+import orchestrator from "infra/scripts/orchestrator";
+import database from "infra/database";
+
+beforeAll(async () => {
+  await orchestrator.waitForAllServices();
+});
+
 test("POST /api/v1/migrations executes safely", async () => {
   const response = await fetch("http://localhost:3000/api/v1/migrations", {
     method: "POST",
   });
 
-  // Pode ser 200 (nenhuma migração) ou 201 (migrações aplicadas)
   expect([200, 201]).toContain(response.status);
 
   const responseBody = await response.json();
