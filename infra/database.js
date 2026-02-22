@@ -11,7 +11,9 @@ async function query(queryObject) {
     console.error("Database query error:", error);
     throw error;
   } finally {
-    await cliente.end();
+    if (cliente) {
+      await cliente.end();
+    }
   }
 }
 
@@ -22,7 +24,9 @@ async function getNewCliente(params) {
     user: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
     database: process.env.POSTGRES_DB,
-    ssl: true,
+    ssl: {
+      rejectUnauthorized: false,
+    },
   });
   await cliente.connect();
   return cliente;

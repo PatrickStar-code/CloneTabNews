@@ -3,6 +3,7 @@ import database from "infra/database";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
+  await database.query("DROP SCHEMA public CASCADE; CREATE SCHEMA public;");
 });
 
 test("POST /api/v1/migrations executes safely", async () => {

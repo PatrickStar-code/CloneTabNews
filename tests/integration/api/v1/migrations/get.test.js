@@ -3,6 +3,7 @@ import orchestrator from "infra/scripts/orchestrator";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
+  await database.query("DROP SCHEMA public CASCADE; CREATE SCHEMA public;");
 });
 
 test("GET /api/v1/migrations should list pending migrations", async () => {
