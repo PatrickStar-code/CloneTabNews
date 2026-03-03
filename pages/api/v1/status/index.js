@@ -1,4 +1,6 @@
 import database from "infra/database.js";
+import "dotenv/config";
+
 export default async function status(req, res) {
   const updateAt = new Date().toISOString();
 

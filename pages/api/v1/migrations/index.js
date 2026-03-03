@@ -1,7 +1,7 @@
 import migrationRunner from "node-pg-migrate";
 import { join } from "node:path";
 import database from "infra/database";
-
+import "dotenv/config";
 export default async function migrations(req, res) {
   const dbClient = await database.getNewCliente();
 
