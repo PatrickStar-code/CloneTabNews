@@ -7,7 +7,7 @@
     "dev": "next dev",
     "lint:check": "prettier --check .",
     "lint:fix": "prettier --write .",
-    "test": "npm run services:up  && concurrently  -n next,jest --hide next -k -s command-jest  \"next dev\"  \"jest --runInBand --verbose\"",
+    "test": "npm run services:up  && concurrently  -n next,jest  -k -s command-jest  \"next dev\"  \"jest --runInBand --verbose\"",
     "test:watch": "jest --watchAll --runInBand",
     "services:up": "docker-compose -f infra/docker-compose.yaml up -d",
     "services:down": "docker-compose -f infra/docker-compose.yaml down",
@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "concurrently": "^8.2.2",
-    "prettier": "^3.7.4"
+    "prettier": "^3.7.4",
+    "wait-on": "^9.0.4"
   }
 }
