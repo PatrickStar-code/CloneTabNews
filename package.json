@@ -7,7 +7,7 @@
     "dev": "next dev",
     "lint:prettier:check": "prettier --check .",
     "lint:prettier:fix": "prettier --write .",
-    "test": "npm run services:up  && concurrently  -n next,jest --hide next -k -s command-jest  \"next dev\"  \"jest --runInBand --verbose\"",
+    "test": "npm run services:up  && concurrently  -n next,jest  -k -s command-jest  \"next dev\"  \"jest --runInBand --verbose\"",
     "test:watch": "jest --watchAll --runInBand",
     "services:up": "docker-compose -f infra/docker-compose.yaml up -d",
     "services:down": "docker-compose -f infra/docker-compose.yaml down",
