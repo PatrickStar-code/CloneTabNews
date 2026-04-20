@@ -1,6 +1,9 @@
 import orchestrator from "infra/scripts/orchestrator";
 
-beforeAll(async () => await orchestrator.waitForAllServices());
+beforeAll(async () => {
+  await orchestrator.waitForAllServices();
+  await orchestrator.clearDatabase();
+});
 
 describe("GET /api/v1/status", () => {
   describe("Anonymous user", () => {
