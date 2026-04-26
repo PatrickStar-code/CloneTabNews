@@ -6,7 +6,7 @@ async function fetchAPI(key) {
   return responseBody;
 }
 
-function MetricCard({ title, value, label, subValue }) {
+export function MetricCard({ title, value, label, subValue }) {
   return (
     <div style={styles.card}>
       <h3 style={styles.cardTitle}>{title}</h3>
