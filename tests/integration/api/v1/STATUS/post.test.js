@@ -5,11 +5,11 @@ beforeAll(async () => {
   await orchestrator.clearDatabase();
 });
 
-describe("PUT /api/v1/migrations", () => {
+describe("POST /api/v1/status", () => {
   describe("Anonymous user", () => {
     test("Posting current system status", async () => {
-      const response = await fetch("http://localhost:3000/api/v1/migrations", {
-        method: "PUT",
+      const response = await fetch("http://localhost:3000/api/v1/status", {
+        method: "POST",
       });
       expect(response.status).toBe(405);
       const responseBody = await response.json();

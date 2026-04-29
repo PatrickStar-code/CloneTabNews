@@ -1,4 +1,5 @@
 import { Client } from "pg";
+import { ServiceError } from "infra/errors";
 
 async function query(queryObject) {
   let cliente;
@@ -7,9 +8,6 @@ async function query(queryObject) {
     cliente = await getNewCliente();
     const result = await cliente.query(queryObject);
     return result;
-  } catch (error) {
-    console.log("\n Erro dentro do catch do database:", error);
-    throw error;
   } finally {
     await cliente?.end();
   }
@@ -26,7 +24,15 @@ async function getNewCliente() {
       rejectUnauthorized: false,
     },
   });
-  await cliente.connect();
+  try {
+    await cliente.connect();
+  } catch (error) {
+    const serviceErrorObject = new ServiceError({
+      message: "Erro na conexão com o banco de dados",
+      cause: error,
+    });
+    throw serviceErrorObject;
+  }
   return cliente;
 }
 
