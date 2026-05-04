@@ -1,10 +1,8 @@
-import { runner as migrationRunner } from "node-pg-migrate";
-import { join } from "node:path";
-import database from "infra/database";
 import "dotenv/config";
 import { createRouter } from "next-connect";
 import controller from "infra/controller";
 export const router = createRouter();
+import migrator from "models/migrator";
 
 router.get(getMigrations);
 router.post(postMigrations);
@@ -12,44 +10,12 @@ router.post(postMigrations);
 export default router.handler(controller.errorHandlers);
 
 async function getMigrations(req, res) {
-  const dbClient = await database.getNewCliente();
-
-  const defaultMigrationOptions = {
-    dbClient,
-    dir: join("infra", "migrations"),
-    dryRun: false,
-    direction: "up",
-    verbose: true,
-    migrationsTable: "pgmigrations",
-  };
-
-  const pendingMigrations = await migrationRunner({
-    ...defaultMigrationOptions,
-    dryRun: true,
-  });
-
-  await dbClient.end();
+  const pendingMigrations = await migrator.listPendingMigrations();
   return res.status(200).json(pendingMigrations);
 }
 
 async function postMigrations(req, res) {
-  const dbClient = await database.getNewCliente();
-
-  const defaultMigrationOptions = {
-    dbClient,
-    dir: join("infra", "migrations"),
-    dryRun: false,
-    direction: "up",
-    verbose: true,
-    migrationsTable: "pgmigrations",
-  };
-  const migratedMigrations = await migrationRunner({
-    ...defaultMigrationOptions,
-    dryRun: false,
-  });
-
-  await dbClient.end();
-
+  const migratedMigrations = await migrator.runPendingMigrations();
   return res
     .status(migratedMigrations.length > 0 ? 201 : 200)
     .json(migratedMigrations);
