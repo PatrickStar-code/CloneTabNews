@@ -27,4 +27,8 @@ async function clearDatabase() {
   await database.query("DROP SCHEMA public CASCADE; CREATE SCHEMA public;");
 }
 
-export default { waitForAllServices, clearDatabase };
+async function runPendingMigrations() {
+  const migrator = await import("models/migrator");
+  await migrator.default.runPendingMigrations();
+}
+export default { waitForAllServices, clearDatabase, runPendingMigrations };
