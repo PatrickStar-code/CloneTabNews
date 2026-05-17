@@ -27,19 +27,20 @@ export const up = (pgm) => {
       notNull: true,
       unique: true,
     },
-    //why 72 lenght? https://stackoverflow.com/a/39849
+    //why 60 lenght? because the max length of the bcrypt hash
     password: {
-      type: "varchar(72)",
+      type: "varchar(60)",
       notNull: true,
     },
     created_at: {
       type: "timestamptz",
       notNull: true,
-      default: pgm.func("now()"),
+      default: pgm.func("timezone('UTC'::text, now())"),
     },
     updated_at: {
       type: "timestamptz",
-      default: pgm.func("now()"),
+      default: pgm.func("timezone('UTC'::text, now())"),
+      notNull: true,
     },
   });
 };
