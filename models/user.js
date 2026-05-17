@@ -1,5 +1,5 @@
 import database from "infra/database.js";
-import { ValidationError } from "infra/errors.js";
+import { ValidationError, NotFoundError } from "infra/errors.js";
 
 async function createUser(userInputValues) {
   await validateUniqueEmail(userInputValues.email);
@@ -24,42 +24,67 @@ async function createUser(userInputValues) {
 
     return result.rows[0];
   }
+}
 
-  async function validateUniqueEmail(email) {
-    const result = await database.query({
-      text: `
+async function validateUniqueEmail(email) {
+  const result = await database.query({
+    text: `
     SELECT * FROM users WHERE LOWER(email) = LOWER($1)
   `,
-      values: [email],
+    values: [email],
+  });
+
+  if (result.rowCount > 0) {
+    throw new ValidationError({
+      message: "Email já cadastrado",
+      action: "Utilize outro email para o cadastro",
     });
-
-    if (result.rowCount > 0) {
-      throw new ValidationError({
-        message: "Email já cadastrado",
-        action: "Utilize outro email para o cadastro",
-      });
-    }
   }
+}
 
-  async function validateUserName(username) {
+async function validateUserName(username) {
+  const result = await database.query({
+    text: `
+    SELECT * FROM users WHERE LOWER(username) = LOWER($1)
+  `,
+    values: [username],
+  });
+
+  if (result.rowCount > 0) {
+    throw new ValidationError({
+      message: "Nome de usuário já cadastrado",
+      action: "Utilize outro nome de usuário para o cadastro",
+    });
+  }
+}
+
+async function findOneByUsername(username) {
+  const result = await runSelectQuery(username);
+
+  return result.rows[0];
+
+  async function runSelectQuery(username) {
     const result = await database.query({
       text: `
-    SELECT * FROM users WHERE LOWER(username) = LOWER($1)
+    SELECT * FROM users WHERE LOWER(username) = LOWER($1) LIMIT 1
   `,
       values: [username],
     });
 
-    if (result.rowCount > 0) {
-      throw new ValidationError({
-        message: "Nome de usuário já cadastrado",
-        action: "Utilize outro nome de usuário para o cadastro",
+    if (result.rowCount === 0) {
+      throw new NotFoundError({
+        message: "Usuário não encontrado no sistema",
+        action: "Verifique se o Username está digitado corretamente",
       });
     }
+
+    return result;
   }
 }
 
 const user = {
   createUser,
+  findOneByUsername,
 };
 
 export default user;
