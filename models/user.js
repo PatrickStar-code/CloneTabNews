@@ -2,8 +2,8 @@ import database from "infra/database.js";
 import { ValidationError, NotFoundError } from "infra/errors.js";
 import password from "./password";
 async function createUser(userInputValues) {
-  await validateUniqueEmail(userInputValues.email);
   await validateUserName(userInputValues.username);
+  await validateUniqueEmail(userInputValues.email);
   await hashPasswordInObject(userInputValues);
 
   const newUser = await runInsertQuery(userInputValues);
@@ -27,6 +27,18 @@ async function createUser(userInputValues) {
   }
 }
 
+async function update(username, userInputValues) {
+  const currentUser = await findOneByUsername(username);
+
+  if (userInputValues.name) {
+    await validateUserName(userInputValues.name);
+  }
+
+  if (userInputValues.email) {
+    await validateUniqueEmail(userInputValues.email);
+  }
+}
+
 async function validateUniqueEmail(email) {
   const result = await database.query({
     text: `
@@ -38,7 +50,7 @@ async function validateUniqueEmail(email) {
   if (result.rowCount > 0) {
     throw new ValidationError({
       message: "Email já cadastrado",
-      action: "Utilize outro email para o cadastro",
+      action: "Utilize outro email para realizar esta operação",
     });
   }
 }
@@ -54,7 +66,7 @@ async function validateUserName(username) {
   if (result.rowCount > 0) {
     throw new ValidationError({
       message: "Nome de usuário já cadastrado",
-      action: "Utilize outro nome de usuário para o cadastro",
+      action: "Utilize outro nome de usuário para realizar esta operação",
     });
   }
 }
@@ -91,6 +103,7 @@ async function findOneByUsername(username) {
 const user = {
   createUser,
   findOneByUsername,
+  update,
 };
 
 export default user;
