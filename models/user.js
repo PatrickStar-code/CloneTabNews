@@ -37,6 +37,38 @@ async function update(username, userInputValues) {
   if (userInputValues.email) {
     await validateUniqueEmail(userInputValues.email);
   }
+
+  if (userInputValues.password) {
+    await hashPasswordInObject(userInputValues);
+  }
+
+  const userWithNewValues = { ...currentUser, ...userInputValues };
+
+  const userUpdated = await runUpdateQuery(userWithNewValues);
+
+  return userUpdated;
+
+  async function runUpdateQuery(userWithNewValues) {
+    const result = await database.query({
+      text: `
+    UPDATE users
+    SET username = $1,
+     email = $2, 
+     password = $3,
+     updated_at = timezone('utc', now())
+    WHERE id = $4
+    RETURNING *;
+  `,
+      values: [
+        userWithNewValues.username,
+        userWithNewValues.email,
+        userWithNewValues.password,
+        userWithNewValues.id,
+      ],
+    });
+
+    return result.rows[0];
+  }
 }
 
 async function validateUniqueEmail(email) {
