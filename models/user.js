@@ -1,9 +1,10 @@
 import database from "infra/database.js";
 import { ValidationError, NotFoundError } from "infra/errors.js";
-
+import password from "./password";
 async function createUser(userInputValues) {
-  await validateUniqueEmail(userInputValues.email);
   await validateUserName(userInputValues.username);
+  await validateUniqueEmail(userInputValues.email);
+  await hashPasswordInObject(userInputValues);
 
   const newUser = await runInsertQuery(userInputValues);
   return newUser;
@@ -26,6 +27,50 @@ async function createUser(userInputValues) {
   }
 }
 
+async function update(username, userInputValues) {
+  const currentUser = await findOneByUsername(username);
+
+  if (userInputValues.name) {
+    await validateUserName(userInputValues.name);
+  }
+
+  if (userInputValues.email) {
+    await validateUniqueEmail(userInputValues.email);
+  }
+
+  if (userInputValues.password) {
+    await hashPasswordInObject(userInputValues);
+  }
+
+  const userWithNewValues = { ...currentUser, ...userInputValues };
+
+  const userUpdated = await runUpdateQuery(userWithNewValues);
+
+  return userUpdated;
+
+  async function runUpdateQuery(userWithNewValues) {
+    const result = await database.query({
+      text: `
+    UPDATE users
+    SET username = $1,
+     email = $2, 
+     password = $3,
+     updated_at = timezone('utc', now())
+    WHERE id = $4
+    RETURNING *;
+  `,
+      values: [
+        userWithNewValues.username,
+        userWithNewValues.email,
+        userWithNewValues.password,
+        userWithNewValues.id,
+      ],
+    });
+
+    return result.rows[0];
+  }
+}
+
 async function validateUniqueEmail(email) {
   const result = await database.query({
     text: `
@@ -37,7 +82,7 @@ async function validateUniqueEmail(email) {
   if (result.rowCount > 0) {
     throw new ValidationError({
       message: "Email já cadastrado",
-      action: "Utilize outro email para o cadastro",
+      action: "Utilize outro email para realizar esta operação",
     });
   }
 }
@@ -53,9 +98,14 @@ async function validateUserName(username) {
   if (result.rowCount > 0) {
     throw new ValidationError({
       message: "Nome de usuário já cadastrado",
-      action: "Utilize outro nome de usuário para o cadastro",
+      action: "Utilize outro nome de usuário para realizar esta operação",
     });
   }
+}
+
+async function hashPasswordInObject(object) {
+  const hashPassword = await password.hash(object.password);
+  object.password = hashPassword;
 }
 
 async function findOneByUsername(username) {
@@ -85,6 +135,7 @@ async function findOneByUsername(username) {
 const user = {
   createUser,
   findOneByUsername,
+  update,
 };
 
 export default user;
