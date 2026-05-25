@@ -4,7 +4,7 @@ import { join } from "node:path";
 let dbClient;
 
 const defaultMigrationOptions = {
-  dir: join("infra", "migrations"),
+  dir: join(process.cwd(), "infra", "migrations"),
   dryRun: true,
   direction: "up",
   log: () => {},
