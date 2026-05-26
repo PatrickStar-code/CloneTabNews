@@ -24,6 +24,7 @@ function onErrorHandler(error, req, res) {
     return res.status(error.statusCode).json(error);
   }
 
+  console.error(error);
   res.status(publicErrorObject.statusCode).json(publicErrorObject);
 }
 
