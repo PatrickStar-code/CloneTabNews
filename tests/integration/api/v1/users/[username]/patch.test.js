@@ -1,6 +1,6 @@
 import orchestrator from "infra/scripts/orchestrator";
-import password from "models/password";
 import user from "models/user";
+import password from "models/password";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
@@ -37,57 +37,16 @@ describe("PATCH /api/v1/users/[username]", () => {
   });
 
   test("Duplicated username", async () => {
-    const user1Response = await fetch("http://localhost:3000/api/v1/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: "user1",
-        email: "username_duplicado@gmail.com",
-        password: "password",
-      }),
-    });
-
-    const user1ResponseBody = await user1Response.json();
-
-    expect([200, 201]).toContain(user1Response.status);
-    expect(user1ResponseBody).toEqual({
-      id: user1ResponseBody.id,
+    await orchestrator.createUser({
       username: "user1",
-      email: "username_duplicado@gmail.com",
-      password: user1ResponseBody.password,
-      created_at: user1ResponseBody.created_at,
-      updated_at: user1ResponseBody.updated_at,
     });
 
-    const user2Response = await fetch("http://localhost:3000/api/v1/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: "user2",
-        email: "username_duplicado2@gmail.com",
-        password: "password",
-      }),
-    });
-
-    expect(user2Response.status).toBe(201);
-
-    const user2ResponseBody = await user2Response.json();
-
-    expect(user2ResponseBody).toEqual({
-      id: user2ResponseBody.id,
+    await orchestrator.createUser({
       username: "user2",
-      email: "username_duplicado2@gmail.com",
-      password: user2ResponseBody.password,
-      created_at: user2ResponseBody.created_at,
-      updated_at: user2ResponseBody.updated_at,
     });
 
     const updateUser1 = await fetch(
-      `http://localhost:3000/api/v1/users/${user1ResponseBody.username}`,
+      `http://localhost:3000/api/v1/users/user1`,
       {
         method: "PATCH",
         headers: {
@@ -112,64 +71,23 @@ describe("PATCH /api/v1/users/[username]", () => {
   });
 
   test("Duplicated email", async () => {
-    const user1Response = await fetch("http://localhost:3000/api/v1/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: "email1",
-        email: "email_duplicado1@gmail.com",
-        password: "password",
-      }),
-    });
-
-    const user1ResponseBody = await user1Response.json();
-
-    expect([200, 201]).toContain(user1Response.status);
-    expect(user1ResponseBody).toEqual({
-      id: user1ResponseBody.id,
-      username: "email1",
+    await orchestrator.createUser({
       email: "email_duplicado1@gmail.com",
-      password: user1ResponseBody.password,
-      created_at: user1ResponseBody.created_at,
-      updated_at: user1ResponseBody.updated_at,
     });
 
-    const user2Response = await fetch("http://localhost:3000/api/v1/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: "email2",
-        email: "email_duplicado2@gmail.com",
-        password: "password",
-      }),
-    });
-
-    expect(user2Response.status).toBe(201);
-
-    const user2ResponseBody = await user2Response.json();
-
-    expect(user2ResponseBody).toEqual({
-      id: user2ResponseBody.id,
-      username: "email2",
+    const user2 = await orchestrator.createUser({
       email: "email_duplicado2@gmail.com",
-      password: user2ResponseBody.password,
-      created_at: user2ResponseBody.created_at,
-      updated_at: user2ResponseBody.updated_at,
     });
 
     const updateUser1 = await fetch(
-      `http://localhost:3000/api/v1/users/${user1ResponseBody.username}`,
+      `http://localhost:3000/api/v1/users/${user2.username}`,
       {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: "email_duplicado2@gmail.com",
+          email: user2.email,
         }),
       },
     );

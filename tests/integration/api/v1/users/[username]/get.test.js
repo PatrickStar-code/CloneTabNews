@@ -9,70 +9,38 @@ beforeAll(async () => {
 describe("GET /api/v1/users/[username]", () => {
   describe("Anonymous user", () => {
     test("With exact  case match", async () => {
-      const response = await fetch("http://localhost:3000/api/v1/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: "procurado",
-          email: "procurado@gmail.com",
-          password: "password",
-        }),
+      const user = await orchestrator.createUser({});
+
+      expect(user).toEqual({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        password: user.password,
+        created_at: user.created_at,
+        updated_at: user.updated_at,
       });
 
-      expect([200, 201]).toContain(response.status);
-
-      const response2 = await fetch(
-        "http://localhost:3000/api/v1/users/procurado",
-      );
-
-      expect([200, 201]).toContain(response2.status);
-
-      const responseBody2 = await response2.json();
-
-      expect(responseBody2).toEqual({
-        id: responseBody2.id,
-        username: "procurado",
-        email: "procurado@gmail.com",
-        password: responseBody2.password,
-        created_at: responseBody2.created_at,
-        updated_at: responseBody2.updated_at,
-      });
-
-      expect(uuidversion(responseBody2.id)).toBe(4);
-      expect(Date.parse(responseBody2.created_at)).not.toBeNaN();
-      expect(Date.parse(responseBody2.updated_at)).not.toBeNaN();
+      expect(uuidversion(user.id)).toBe(4);
+      expect(Date.parse(user.created_at)).not.toBeNaN();
+      expect(Date.parse(user.updated_at)).not.toBeNaN();
     });
 
     test("Case  missmatch", async () => {
-      const response = await fetch("http://localhost:3000/api/v1/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: "CaseDiferente",
-          email: "case.diferente@gmail.com",
-          password: "password",
-        }),
-      });
-
-      expect([200, 201]).toContain(response.status);
+      const user = await orchestrator.createUser({});
 
       const response2 = await fetch(
-        "http://localhost:3000/api/v1/users/casediferente",
+        `http://localhost:3000/api/v1/users/${user.username.toLowerCase()}`,
       );
 
-      expect([200, 201]).toContain(response2.status);
+      expect(response2.status).toBe(200);
 
       const responseBody2 = await response2.json();
 
       expect(responseBody2).toEqual({
         id: responseBody2.id,
-        username: "CaseDiferente",
-        email: "case.diferente@gmail.com",
-        password: responseBody2.password,
+        username: user.username,
+        email: user.email,
+        password: user.password,
         created_at: responseBody2.created_at,
         updated_at: responseBody2.updated_at,
       });
